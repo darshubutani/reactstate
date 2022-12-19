@@ -93,58 +93,128 @@
 // ];
 ///////////////////////////////////////////////////////////////////////////
 
-import {useContext, useState } from 'react';
-import './App.css'
-import { ThemeContext } from './Context';
+// import {useContext, useState } from 'react';
+// import './App.css'
+// import { ThemeContext } from './Context';
 
-export default function MyApp() {
-  const [theme, setTheme] = useState('light');
-  return (
-    <ThemeContext.Provider value={theme}>
-      <Form />
-      <label>
-        <input
-          type="checkbox"
-          checked={theme === 'dark'}
-          onChange={(e) => {
-            setTheme(e.target.checked ? 'dark' : 'light')
-          }}
-        />
-        Use dark mode
-      </label>
-    </ThemeContext.Provider>
-  )
+// export default function MyApp() {
+//   const [theme, setTheme] = useState('light');
+//   return (
+//     <ThemeContext.Provider value={theme}>
+//       <Form />
+//       <label>
+//         <input
+//           type="checkbox"
+//           checked={theme === 'dark'}
+//           onChange={(e) => {
+//             setTheme(e.target.checked ? 'dark' : 'light')
+//           }}
+//         />
+//         Use dark mode
+//       </label>
+//     </ThemeContext.Provider>
+//   )
+// }
+
+// function Form({ children }) {
+//   return (
+//     <Panel title="Welcome">
+//       <Button>Sign up</Button>
+//       <Button>Log in</Button>
+//     </Panel>
+//   );
+// }
+
+// function Panel({ title, children }) {
+//   const theme = useContext(ThemeContext);
+//   const className = 'panel-' + theme;
+//   return (
+//     <section className={className}>
+//       <h1>{title}</h1>
+//       {children}
+//     </section>
+//   )
+// }
+
+// function Button({ children }) {
+//   const theme = useContext(ThemeContext);
+//   const className = 'button-' + theme;
+//   return (
+//     <button className={className}>
+//       {children}
+//     </button>
+//   );
+// }
+
+///////////////////////////////////////////////////////////////////////
+//useEffect demo
+import { useState, useRef, useEffect } from 'react';
+
+function VideoPlayer({ src, isPlaying }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (isPlaying) {
+      ref.current.play();
+    } else {
+      ref.current.pause();
+    }
+  },[isPlaying]);
+
+  return <video ref={ref} src={src} width="320" height="240" controls loop playsInline />;
 }
 
-function Form({ children }) {
+export default function App() {
+  const [isPlaying, setIsPlaying] = useState(false);
   return (
-    <Panel title="Welcome">
-      <Button>Sign up</Button>
-      <Button>Log in</Button>
-    </Panel>
+    <div>
+      <div>
+      <button onClick={() => setIsPlaying(!isPlaying)}>
+        {isPlaying ? 'Pause' : 'Play'}
+      </button></div>
+      <VideoPlayer
+        isPlaying={isPlaying}
+        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+      />
+    </div>
   );
 }
 
-function Panel({ title, children }) {
-  const theme = useContext(ThemeContext);
-  const className = 'panel-' + theme;
-  return (
-    <section className={className}>
-      <h1>{title}</h1>
-      {children}
-    </section>
-  )
-}
+////////////////////////////////////////////////////////////////////////
+//Custom Hook
 
-function Button({ children }) {
-  const theme = useContext(ThemeContext);
-  const className = 'button-' + theme;
-  return (
-    <button className={className}>
-      {children}
-    </button>
-  );
-}
+// import { useOnlineStatus } from './useOnlineStatus.js';
+
+// function StatusBar() {
+//   const isOnline = useOnlineStatus();
+//   return <h1>{isOnline ? '✅ Online' : '❌ Disconnected'}</h1>;
+// }
+
+// function SaveButton() {
+//   const isOnline = useOnlineStatus();
+
+//   function handleSaveClick() {
+//     console.log('✅ Progress saved');
+//   }
+
+//   return (
+//     <button disabled={!isOnline} onClick={handleSaveClick}>
+//       {isOnline ? 'Save progress' : 'Reconnecting...'}
+//     </button>
+//   );
+// }
+
+// export default function App() {
+//   return (
+//     <>
+//       <SaveButton />
+//       <StatusBar />
+//     </>
+//   );
+// }
+
+
+
 
 
 
